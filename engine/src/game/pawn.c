@@ -136,6 +136,8 @@ void PawnSprite_Disable(u8 sprtIdx)
 	V9_SetSpriteDisableP1(sprtIdx, TRUE);
 #elif (PAWN_SPT_MODE == PAWN_SPT_MODE_V9_P2)
 	V9_SetSpriteDisableP2(sprtIdx, TRUE);
+#elif (PAWN_USE_SPRITEMUX)
+	SpriteMux_Hide(sprtIdx);
 #else // if ((PAWN_SPT_MODE == PAWN_SPT_MODE_AUTO) || (PAWN_SPT_MODE == PAWN_SPT_MODE_MSX1) || (PAWN_SPT_MODE == PAWN_SPT_MODE_MSX2))
 	VDP_HideSprite(sprtIdx);
 #endif
@@ -154,7 +156,9 @@ void PawnSprite_Initialize(u8 sprtIdx)
 	if ((g_Pawn_Sprite->Flag & PAWN_SPRITE_OR) != 0)
 		color |= VDP_SPRITE_CC;
 
-	#if (PAWN_SPT_MODE == PAWN_SPT_MODE_MSX12)
+	#if (PAWN_USE_SPRITEMUX)
+	SpriteMux_SetColor(sprtIdx, color);
+	#elif (PAWN_SPT_MODE == PAWN_SPT_MODE_MSX12)
 	if (VDP_GetMode() < VDP_MODE_MSX2)
 		VDP_SetSpriteColorSM1(sprtIdx, color);
 	else
@@ -166,7 +170,11 @@ void PawnSprite_Initialize(u8 sprtIdx)
 	#endif
 
 	#if (PAWN_USE_RT_LOAD)
+		#if (PAWN_USE_SPRITEMUX)
+	SpriteMux_SetPattern(sprtIdx, sprtIdx * PAWN_PATTERN_NUM);
+		#else
 	VDP_SetSpritePattern(sprtIdx, sprtIdx * PAWN_PATTERN_NUM);
+		#endif
 	#endif
 #endif
 }
@@ -620,6 +628,19 @@ inline void Pawn_Draw_V9()
 
 u8 g_Pawn_FrameOffset;
 
+//-----------------------------------------------------------------------------
+// Write the first bytes of a sprite attribute (Y, X and optionally pattern) from g_Pawn_Buffer
+static void PawnSprite_WriteAttribute(u8 sprtIdx, u8 size)
+{
+#if (PAWN_USE_SPRITEMUX)
+	u8* dest = (u8*)SpriteMux_GetSprite(sprtIdx);
+	loop (i, size)
+		dest[i] = g_Pawn_Buffer[i];
+#else
+	VDP_WriteVRAM(g_Pawn_Buffer, g_SpriteAttributeLow + (sprtIdx * 4), g_SpriteAttributeHigh, size);
+#endif
+}
+
 #if (PAWN_ID_PER_LAYER)
 //-----------------------------------------------------------------------------
 // Update rendering of the game pawn
@@ -681,8 +702,7 @@ inline void Pawn_Draw_Sprite()
 			#endif
 		}
 
-		u16 dest = g_SpriteAttributeLow + (g_Pawn_Sprite->SpriteID * 4);		
-		VDP_WriteVRAM(g_Pawn_Buffer, dest, g_SpriteAttributeHigh, size);
+		PawnSprite_WriteAttribute(g_Pawn_Sprite->SpriteID, size);
 		
 		g_Pawn_Sprite++;
 	}
@@ -695,7 +715,6 @@ inline void Pawn_Draw_Sprite()
 	g_Pawn_Sprite = g_Pawn->SpriteList;
 
 	u8 sprtIdx = g_Pawn->SpriteID;
-	u16 dest = g_SpriteAttributeLow + (g_Pawn->SpriteID * 4);
 	loop (i, g_Pawn->SpriteNum)
 	{
 		g_Pawn_FrameOffset = 0;
@@ -750,10 +769,9 @@ inline void Pawn_Draw_Sprite()
 			#endif
 		}
 
-		VDP_WriteVRAM(g_Pawn_Buffer, dest, g_SpriteAttributeHigh, size);
+		PawnSprite_WriteAttribute(sprtIdx, size);
 		
 		sprtIdx++;
-		dest += 4;
 
 		g_Pawn_Sprite++;
 	}

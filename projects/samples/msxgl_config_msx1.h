@@ -247,6 +247,15 @@
 #define SPRITEFX_USE_ROTATE			TRUE	// Use rotating effect
 
 //-----------------------------------------------------------------------------
+// SPRITE MULTIPLEXER MODULE
+//-----------------------------------------------------------------------------
+
+#define SPRITEMUX_MAX				32		// Number of logical sprites managed by the multiplexer (max 32)
+#define SPRITEMUX_USE_SWAP			TRUE	// Include Swap ordering mode
+#define SPRITEMUX_USE_ROTATE		TRUE	// Include Rotate ordering mode
+#define SPRITEMUX_ROTATE_STEP		1		// Rotation increment per frame (Rotate mode)
+
+//-----------------------------------------------------------------------------
 // GAME MAIN MODULE
 //-----------------------------------------------------------------------------
 

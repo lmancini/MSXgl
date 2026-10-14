@@ -11,6 +11,9 @@
 #include "vdp.h"
 #include "bios_hook.h"
 #include "bios_mainrom.h"
+#if (GAME_USE_SPRITEMUX)
+	#include "sprite_mux.h"
+#endif
 
 //-----------------------------------------------------------------------------
 // Defines
@@ -81,6 +84,9 @@ void Game_Update()
 {
 	#if (GAME_USE_VSYNC)
 		Game_WaitVSync();
+	#endif
+	#if (GAME_USE_SPRITEMUX)
+		SpriteMux_Update(); // Upload sprites as soon as possible after the V-Synch (does nothing while the multiplexer is disabled)
 	#endif
 	#if (GAME_USE_STATE)
 		Game_UpdateState();

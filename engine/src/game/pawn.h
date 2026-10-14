@@ -163,6 +163,17 @@
 	#endif
 #endif
 
+// PAWN_USE_SPRITEMUX
+#ifndef PAWN_USE_SPRITEMUX
+	#define PAWN_USE_SPRITEMUX		FALSE
+#endif
+#if (PAWN_USE_SPRITEMUX)
+	#if (PAWN_SPT_MODE != PAWN_SPT_MODE_MSX1)
+		#error PAWN_USE_SPRITEMUX is only supported with PAWN_SPT_MODE_MSX1 (Sprite Mode 1)
+	#endif
+	#include "sprite_mux.h"
+#endif
+
 // Pawn coordinate unit
 #if (PAWN_UNIT == PAWN_UNIT_SCREEN)
 	#define PAWN_POS				u8

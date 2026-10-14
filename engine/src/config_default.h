@@ -398,6 +398,11 @@
 	#define GAME_USE_LOOP				TRUE
 #endif
 
+// GAME_USE_SPRITEMUX
+#ifndef GAME_USE_SPRITEMUX
+	#define GAME_USE_SPRITEMUX			FALSE
+#endif
+
 //-----------------------------------------------------------------------------
 // STRING MODULE
 //-----------------------------------------------------------------------------
