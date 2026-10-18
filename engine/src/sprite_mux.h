@@ -47,6 +47,10 @@
 // OPTIONS VALIDATION
 //=============================================================================
 
+#if (!VDP_USE_SPRITE)
+	#error The sprite multiplexer module needs VDP_USE_SPRITE to be TRUE
+#endif
+
 // SPRITEMUX_MAX
 #ifndef SPRITEMUX_MAX
 	#warning SPRITEMUX_MAX is not defined in "msxgl_config.h"! Default value will be used: 32
