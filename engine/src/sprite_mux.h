@@ -28,6 +28,12 @@
 // Note: changing the priority order also changes which sprite is drawn on top
 // when two sprites overlap. Sprites that are layered on purpose (ex: a
 // multi-color character made of several sprites) should be pinned.
+//
+// Requirements:
+// - The VDP must use Sprite Mode 1 (4 bytes per sprite attribute) with its
+//   sprite pattern and attribute tables configured by the application.
+// - VDP_USE_SPRITE must be enabled and the "sprite_mux" module must be
+//   compiled and linked (add it to the project's LibModules list).
 //─────────────────────────────────────────────────────────────────────────────
 #pragma once
 
@@ -45,6 +51,9 @@
 #ifndef SPRITEMUX_MAX
 	#warning SPRITEMUX_MAX is not defined in "msxgl_config.h"! Default value will be used: 32
 	#define SPRITEMUX_MAX				32
+#endif
+#if (SPRITEMUX_MAX < 1)
+	#error SPRITEMUX_MAX must be greater or equal to 1
 #endif
 #if (SPRITEMUX_MAX > 32)
 	#error SPRITEMUX_MAX must be lower or equal to 32 (number of hardware sprites)
@@ -87,8 +96,11 @@ enum SPRITEMUX_MODE
 // Shadow sprite attribute table (logical order)
 extern VDP_Sprite g_SpriteMux_Table[SPRITEMUX_MAX];
 
+// Maximum size of the frame buffer: SPRITEMUX_MAX sprites plus the end-of-list marker
+#define SPRITEMUX_BUFFER_SIZE			(SPRITEMUX_MAX * 4 + 1)
+
 // Buffer with the attribute table in the order of the current frame (ready to be uploaded to VRAM)
-extern u8 g_SpriteMux_Buffer[32 * 4];
+extern u8 g_SpriteMux_Buffer[SPRITEMUX_BUFFER_SIZE];
 
 // Number of bytes to upload from g_SpriteMux_Buffer
 extern u8 g_SpriteMux_BufferSize;
@@ -140,10 +152,22 @@ void SpriteMux_HideAll();
 
 // Function: SpriteMux_SetMode
 // Set the ordering strategy.
+// Modes disabled at compile time fall back to <SPRITEMUX_MODE_NONE>.
 //
 // Parameters:
 //   mode - Ordering strategy (see <SPRITEMUX_MODE>)
-inline void SpriteMux_SetMode(u8 mode) { g_SpriteMux_Mode = mode; }
+inline void SpriteMux_SetMode(u8 mode)
+{
+#if (!SPRITEMUX_USE_SWAP)
+	if (mode == SPRITEMUX_MODE_SWAP)
+		mode = SPRITEMUX_MODE_NONE;
+#endif
+#if (!SPRITEMUX_USE_ROTATE)
+	if (mode == SPRITEMUX_MODE_ROTATE)
+		mode = SPRITEMUX_MODE_NONE;
+#endif
+	g_SpriteMux_Mode = mode;
+}
 
 // Function: SpriteMux_GetMode
 // Get the current ordering strategy.
@@ -230,7 +254,7 @@ void SpriteMux_Prepare();
 
 // Function: SpriteMux_Flush
 // Upload the attribute table built by <SpriteMux_Prepare> to VRAM.
-// Should be called during V-Blank.
+// Should be called during V-Blank. Does nothing while the multiplexer is disabled (see <SpriteMux_SetEnable>).
 void SpriteMux_Flush();
 
 // Function: SpriteMux_Update

@@ -16,6 +16,9 @@
 // #if (PAWN_USE_RT_LOAD && PAWN_USE_SPRT_FX)
 #include "sprite_fx.h"
 // #endif
+#if (PAWN_USE_SPRITEMUX)
+#include "sprite_mux.h"
+#endif
 
 //=============================================================================
 // DEFINES

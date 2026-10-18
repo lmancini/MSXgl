@@ -33,6 +33,12 @@
 	#define PAWN_USE_SPRT_FX		FALSE
 #endif
 
+// PAWN_USE_SPRITEMUX
+#ifndef PAWN_USE_SPRITEMUX
+	#warning PAWN_USE_SPRITEMUX is not defined in "msxgl_config.h"! Default value will be used: FALSE
+	#define PAWN_USE_SPRITEMUX		FALSE
+#endif
+
 // PAWN_SPRITE_SIZE
 #ifndef PAWN_SPRITE_SIZE
 	#warning PAWN_SPRITE_SIZE is not defined in "msxgl_config.h"! Default value will be used: 16
@@ -163,15 +169,11 @@
 	#endif
 #endif
 
-// PAWN_USE_SPRITEMUX
-#ifndef PAWN_USE_SPRITEMUX
-	#define PAWN_USE_SPRITEMUX		FALSE
-#endif
+// PAWN_USE_SPRITEMUX validation
 #if (PAWN_USE_SPRITEMUX)
 	#if (PAWN_SPT_MODE != PAWN_SPT_MODE_MSX1)
 		#error PAWN_USE_SPRITEMUX is only supported with PAWN_SPT_MODE_MSX1 (Sprite Mode 1)
 	#endif
-	#include "sprite_mux.h"
 #endif
 
 // Pawn coordinate unit

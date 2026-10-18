@@ -17,7 +17,7 @@
 VDP_Sprite g_SpriteMux_Table[SPRITEMUX_MAX];
 
 // Buffer with the attribute table in the order of the current frame
-u8 g_SpriteMux_Buffer[32 * 4];
+u8 g_SpriteMux_Buffer[SPRITEMUX_BUFFER_SIZE];
 
 // Number of bytes to upload from g_SpriteMux_Buffer
 u8 g_SpriteMux_BufferSize;
@@ -33,11 +33,11 @@ u8 g_SpriteMux_Frame;
 
 #if (SPRITEMUX_USE_ROTATE)
 // Rotation offset (ROTATE mode)
-u8 g_SpriteMux_Offset;
+static u8 g_SpriteMux_Offset;
 #endif
 
 // Logical indexes of the visible non-pinned sprites (in logical order)
-u8 g_SpriteMux_Active[SPRITEMUX_MAX];
+static u8 g_SpriteMux_Active[SPRITEMUX_MAX];
 
 // Is the multiplexer the owner of the hardware sprite attribute table?
 bool g_SpriteMux_Enabled;
@@ -184,6 +184,8 @@ void SpriteMux_Prepare()
 // Upload the attribute table to VRAM
 void SpriteMux_Flush()
 {
+	if (!g_SpriteMux_Enabled)
+		return;
 	VDP_WriteVRAM(g_SpriteMux_Buffer, g_SpriteAttributeLow, g_SpriteAttributeHigh, g_SpriteMux_BufferSize);
 }
 

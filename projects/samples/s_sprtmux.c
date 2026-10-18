@@ -114,7 +114,7 @@ typedef struct Ball
 
 u8 g_VBlank = 0;
 u8 g_PlayerX = 120;
-u8 g_PlayerY = 140;
+u8 g_PlayerY = AREA_MAX_Y;
 bool g_Pinned = TRUE;
 u8 g_Scene = SCENE_ROW;
 u8 g_Frame = 0;
@@ -292,13 +292,13 @@ void main()
 			bContinue = FALSE;
 
 		u8 row8 = Keyboard_Read(8);
-		if (IS_KEY_PRESSED(row8, KEY_RIGHT) && (g_PlayerX < 240))
+		if (IS_KEY_PRESSED(row8, KEY_RIGHT) && (g_PlayerX < AREA_MAX_X))
 			g_PlayerX++;
-		if (IS_KEY_PRESSED(row8, KEY_LEFT) && (g_PlayerX > 0))
+		if (IS_KEY_PRESSED(row8, KEY_LEFT) && (g_PlayerX > AREA_MIN_X))
 			g_PlayerX--;
-		if (IS_KEY_PRESSED(row8, KEY_DOWN) && (g_PlayerY < 128))
+		if (IS_KEY_PRESSED(row8, KEY_DOWN) && (g_PlayerY < AREA_MAX_Y))
 			g_PlayerY++;
-		if (IS_KEY_PRESSED(row8, KEY_UP) && (g_PlayerY > 16))
+		if (IS_KEY_PRESSED(row8, KEY_UP) && (g_PlayerY > AREA_MIN_Y))
 			g_PlayerY--;
 		SpriteMux_SetPosition(PLAYER_ID, g_PlayerX, g_PlayerY);
 	}

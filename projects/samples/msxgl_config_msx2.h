@@ -263,6 +263,7 @@
 #define GAME_USE_STATE				TRUE	// Add state machine features
 #define GAME_USE_VSYNC				TRUE	// Add vertical synchronization features
 #define GAME_USE_LOOP				TRUE	// Add game main loop with call to v-synch and state
+#define GAME_USE_SPRITEMUX			FALSE	// Add automatic sprite multiplexer update (requires "sprite_mux" module)
 #define GAME_USE_SYNC_50HZ			TRUE	// Force 50Hz synchronization on 60Hz machine
 
 //-----------------------------------------------------------------------------
@@ -273,6 +274,7 @@
 #define PAWN_ID_PER_LAYER			FALSE	// Set sprite ID for each layer (otherwise set per pawn)
 #define PAWN_USE_RT_LOAD			FALSE	// Load sprite pattern data on the fly (real-time)
 #define PAWN_USE_SPRT_FX			FALSE	// Allow sprite effects (crop, flip, mask, rotate)
+#define PAWN_USE_SPRITEMUX			FALSE	// Use sprite multiplexer for sprite attributes (requires "sprite_mux" module and MSX1 sprite mode)
 #define PAWN_SPRITE_SIZE			16		// Sprite size mode (8 for 8x8 pixel mode, or 16 for 16x16)
 #define PAWN_BLEND_OFFSET			12		// Sprite pattern offset for blending mode
 #define PAWN_USE_PHYSICS			TRUE	// Add physics and collision features

@@ -400,6 +400,7 @@
 
 // GAME_USE_SPRITEMUX
 #ifndef GAME_USE_SPRITEMUX
+	#warning GAME_USE_SPRITEMUX is not defined in "msxgl_config.h"! Default value will be used: FALSE
 	#define GAME_USE_SPRITEMUX			FALSE
 #endif
 

@@ -247,6 +247,15 @@
 #define SPRITEFX_USE_ROTATE			TRUE	// Use rotating effect
 
 //-----------------------------------------------------------------------------
+// SPRITE MULTIPLEXER MODULE
+//-----------------------------------------------------------------------------
+
+#define SPRITEMUX_MAX				32		// Number of logical sprites managed by the multiplexer (max 32)
+#define SPRITEMUX_USE_SWAP			TRUE	// Include Swap ordering mode
+#define SPRITEMUX_USE_ROTATE		TRUE	// Include Rotate ordering mode
+#define SPRITEMUX_ROTATE_STEP		1		// Rotation increment per frame (Rotate mode)
+
+//-----------------------------------------------------------------------------
 // GAME MAIN MODULE
 //-----------------------------------------------------------------------------
 
@@ -254,6 +263,7 @@
 #define GAME_USE_STATE				FALSE	// Add state machine features
 #define GAME_USE_VSYNC				FALSE	// Add vertical synchronization features
 #define GAME_USE_LOOP				FALSE	// Add game main loop with call to v-synch and state
+#define GAME_USE_SPRITEMUX			FALSE	// Add automatic sprite multiplexer update (requires "sprite_mux" module)
 #define GAME_USE_SYNC_50HZ			TRUE	// Force 50Hz synchronization on 60Hz machine
 
 //-----------------------------------------------------------------------------
@@ -264,6 +274,7 @@
 #define PAWN_ID_PER_LAYER			FALSE	// Set sprite ID for each layer (otherwise set per pawn)
 #define PAWN_USE_RT_LOAD			TRUE	// Load sprite pattern data on the fly (real-time)
 #define PAWN_USE_SPRT_FX			TRUE	// Allow sprite effects (crop, flip, mask, rotate)
+#define PAWN_USE_SPRITEMUX			FALSE	// Use sprite multiplexer for sprite attributes (requires "sprite_mux" module and MSX1 sprite mode)
 #define PAWN_SPRITE_SIZE			16		// Sprite size mode (8 for 8x8 pixel mode, or 16 for 16x16)
 #define PAWN_BLEND_OFFSET			12		// Sprite pattern offset for blending mode
 #define PAWN_USE_PHYSICS			TRUE	// Add physics and collision features
